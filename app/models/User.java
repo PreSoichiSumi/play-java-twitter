@@ -31,6 +31,9 @@ public class User extends Model {
     @Constraints.Pattern(value = "\\w{4,16}",
             message = "パスワードは英数字で構成され、4文字以上16文字以下です")
     public String password;
+
+    public String userName;
+
     public String biography;
 
     @OneToMany(cascade = CascadeType.ALL)

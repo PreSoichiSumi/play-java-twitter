@@ -1,7 +1,9 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.User;
 import play.data.DynamicForm;
+import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -32,14 +34,15 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        return ok(index.render("this is top page"));
+        return ok(index.render());
     }
 
     public Result signpage() {
+        Form<User> f = formfactory.form(User.class);
         return ok(signin.render("Sign in / Sign up", Html.apply("")));
     }
 
-    public Result register() {
+    public Result registerUser() {
 
     }
 

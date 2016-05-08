@@ -4,78 +4,30 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-@(title: String)(content: Html)
-
-<!DOCTYPE html>
-<html lang="jp">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <title>@title</title>
-    </head>
-
-    <body>
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Re:twitter</a>
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="">Default</a></li>
-                        <li> <button class="btn btn-primary navbar-btn" type="button">ツイート</button></li>
-                    </ul>
-                </div>
+<div class="page-header" id="banner">
+    <div class="row">
+        <h1></h1> <h3></h3>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-4">
+            <div class="well well-sm well-lg">
+                <h3>Yousei</h3>
+                heiheihei~~^
             </div>
-        </nav>
-        <div class="container">
-            <div class="page-header" id="banner">
-                <div class="row">
-                        <h1></h1><h3></h3>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-4">
-                        <div class="well well-sm well-lg">
-                            <h3>Yousei</h3>
-                            heiheihei~~^
-                        </div>
-                    </div>
-                    <ul class="list-group col-lg-9 col-md-9 col-sm-8">
-                        <li class="list-group-item">unko</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Morbi leo risus</li>
-                        <li class="list-group-item">Porta ac consectetur ac</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
-                    </ul>
-                </div>
-            </div>
-
-            @content
-
-            <footer>
-                <div class="row col-lg-12">
-                    <ul class="list-unstyled">
-                        <li>&copy; yousei 2016</li>
-                    </ul>
-                </div>
-            </footer>
-
         </div>
+        <ul class="list-group col-lg-9 col-md-9 col-sm-8">
+            <li class="list-group-item">unko</li>
+            <li class="list-group-item">Dapibus ac facilisis in</li>
+            <li class="list-group-item">Morbi leo risus</li>
+            <li class="list-group-item">Porta ac consectetur ac</li>
+            <li class="list-group-item">Vestibulum at eros</li>
+        </ul>
+    </div>
+</div>
 
-    </body>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
 
-</html>
+
+
+
+
+
