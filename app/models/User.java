@@ -14,6 +14,9 @@ import java.util.List;
 // uniqueでないuserを格納しようとするとExceptionを吐くのでそれを使ってバリデーションする．
 // see http://stackoverflow.com/questions/28906096/
 //          play-framework-2-3-how-to-add-unique-constraint-to-sample-application
+// undirectedは駄目っぽい
+// http://stackoverflow.com/questions/24464812/play-framework-2-ebean-manytoone-column-specified-twice
+// http://stackoverflow.com/questions/15591198/one-to-many-for-same-entity-class-in-play-framework
 
 @Entity
 public class User extends Model {
@@ -39,7 +42,11 @@ public class User extends Model {
     @OneToMany(cascade = CascadeType.ALL)
     public List<Tweet> tweets;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "relationship_table",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "followingId"))
     public List<User> following;
 
     public User() {

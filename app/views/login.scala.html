@@ -4,6 +4,8 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
+@(form: Form[User])
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -23,23 +25,28 @@
     </head>
 
     <body>
-
         <div class="container">
 
-            <form class="form-signin">
-                <h2 class="form-signin-heading">Please sign in</h2>
-                <label for="inputEmail" class="sr-only">UserID</label>
-                <input type="email" id="inputUserId" class="form-control" placeholder="UserID" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <!--TODO フォームヘルパーの自作．ラベルいらない-->
+            @helper.form(action = routes.HomeController.login, 'class -> "form-signin") {
+                <h3 class="form-signin-heading">Please Login</h3>
+                @helper.inputText(form("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @helper.inputText(form("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
                     <!--<div class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>-->
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-            </form>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+            }
+
+            <br><br>
+
+
+            @helper.form(action = routes.HomeController.registerPage, 'class -> "form-signin", 'method -> "get") {
+                <h3 class="form-signin-heading">...Or register account</h3>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Register Account</button>
+            }
 
         </div> <!-- /container -->
 

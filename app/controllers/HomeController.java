@@ -9,10 +9,10 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
-import play.twirl.api.Html;
 import util.ConvertionUtil;
 import views.html.index;
-import views.html.signin;
+import views.html.login;
+import views.html.register;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -37,15 +37,34 @@ public class HomeController extends Controller {
         return ok(index.render());
     }
 
-    public Result signpage() {
+    public Result loginPage() {
         Form<User> f = formfactory.form(User.class);
-        return ok(signin.render("Sign in / Sign up", Html.apply("")));
+        return ok(login.render(f));
     }
 
-    public Result registerUser() {
-
+    public Result login() {
+        return ok();
     }
 
+    public Result registerPage() {
+        Form<User> f = formfactory.form(User.class);
+        return ok(register.render(f));
+    }
+
+    public Result register() {
+        DynamicForm f = formfactory.form().bindFromRequest();
+        if (!f.hasErrors()) {
+            String userId = f.get("userId");
+            String password = f.get("password");
+            User u = new User(userId, password);
+            u.save();
+            return redirect("/login");
+        } else {
+            return redirect("/register");
+        }
+
+
+    }
 
 
     /**

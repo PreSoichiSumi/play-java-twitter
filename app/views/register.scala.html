@@ -1,0 +1,59 @@
+@*
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
+*@
+@(form: Form[User])
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+
+        <title>Sign in / Sign up</title>
+
+            <!-- Custom styles for this template -->
+
+
+    </head>
+
+    <body>
+        <div class="container">
+
+                <!--TODO フォームヘルパーの自作．ラベルいらない-->
+            @helper.form(action = routes.HomeController.register, 'class -> "form-signin") {
+                <h2 class="form-signin-heading">Please sign up</h2>
+                @helper.inputText(form("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @helper.inputText(form("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
+                    <!--<div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>-->
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            }
+
+            @if(form.hasGlobalErrors) {
+                <p class="error">
+                @for(error <- form.globalErrors) {
+                    <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
+                }
+                </p>
+            }
+
+        </div> <!-- /container -->
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link href="@routes.Assets.versioned("stylesheets/signin.css")" rel="stylesheet">
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+        <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+    </body>
+</html>
+

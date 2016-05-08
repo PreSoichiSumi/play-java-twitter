@@ -4,7 +4,7 @@
 
 # An example controller showing a sample home page
 GET         /                     controllers.HomeController.index
-POST        /                     controllers.HomeController.aaConvert()
+POST        /                     controllers.HomeController.aaConvert
 
 # An example controller showing how to use dependency injection
 GET         /count                controllers.CountController.count
@@ -12,7 +12,12 @@ GET         /count                controllers.CountController.count
 GET         /message              controllers.AsyncController.message
 
 # sign in / up page
-GET         /sign                 controllers.HomeController.sign()
+GET         /login                controllers.HomeController.loginPage
+POST        /login                controllers.HomeController.login
+
+GET         /register             controllers.HomeController.registerPage
+POST        /register             controllers.HomeController.register
+
 
 # Map static resources from the /public folder to the /assets URL path
 # use Assets.versiont to cache your resouces
