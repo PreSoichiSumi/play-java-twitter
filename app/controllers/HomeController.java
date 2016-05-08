@@ -7,8 +7,10 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
+import play.twirl.api.Html;
 import util.ConvertionUtil;
 import views.html.index;
+import views.html.signin;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -32,6 +34,16 @@ public class HomeController extends Controller {
     public Result index() {
         return ok(index.render("this is top page"));
     }
+
+    public Result signpage() {
+        return ok(signin.render("Sign in / Sign up", Html.apply("")));
+    }
+
+    public Result register() {
+
+    }
+
+
 
     /**
      * ファイルはフォームデータの一部として送られてこない．

@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "commons-codec" % "commons-codec" % "1.10",
   "junit" % "junit" % "4.12",
   "org.webjars" %% "webjars-play" % "2.5.0",
+  "com.h2database" % "h2" % "1.4.191",
   filters
 )
 herokuAppName in Compile := "asciiart-converter"

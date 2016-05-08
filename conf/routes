@@ -11,6 +11,8 @@ GET         /count                controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET         /message              controllers.AsyncController.message
 
+# sign in / up page
+GET         /sign                 controllers.HomeController.sign()
 
 # Map static resources from the /public folder to the /assets URL path
 # use Assets.versiont to cache your resouces
