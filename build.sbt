@@ -1,4 +1,4 @@
-name := """asciiart-converter-server"""
+name := """play-twitter-sample"""
 
 version := "1.0-SNAPSHOT"
 
@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
   "junit" % "junit" % "4.12",
   "org.webjars" %% "webjars-play" % "2.5.0",
   "com.h2database" % "h2" % "1.4.191",
+  "com.loicdescotte.coffeebean" %% "html5tags" % "1.2.2",
   filters
 )
 herokuAppName in Compile := "asciiart-converter"
@@ -39,9 +40,6 @@ mappings in Universal += (((target in Universal).value / "lib" / "classpath.jar"
 
 //pipelineStages:= Seq(rjs, digest, gzip)
 
-//unmanagedSourceDirectories += project.in(file(".")).dependsOn(githubRepo)
-
-//lazy val githubRepo = uri("git://github.com/oguna/asciiart-converter-java.git")
-
-
-fork in run := true
+// client side validation with play form helper
+// https://github.com/loicdescotte/Play2-HTML5Tags
+resolvers += Resolver.url("github repo for html5tags", url("http://loicdescotte.github.io/Play2-HTML5Tags/releases/"))(Resolver.ivyStylePatterns)

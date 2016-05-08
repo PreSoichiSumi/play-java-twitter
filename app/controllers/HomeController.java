@@ -57,7 +57,12 @@ public class HomeController extends Controller {
             String userId = f.get("userId");
             String password = f.get("password");
             User u = new User(userId, password);
-            u.save();
+            try {
+                u.save();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return redirect("/register");
+            }
             return redirect("/login");
         } else {
             return redirect("/register");

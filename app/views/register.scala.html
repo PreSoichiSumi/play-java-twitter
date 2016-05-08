@@ -4,7 +4,7 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-@(form: Form[User])
+@(accountForm: Form[User])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +30,8 @@
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
             @helper.form(action = routes.HomeController.register, 'class -> "form-signin") {
                 <h2 class="form-signin-heading">Please sign up</h2>
-                @helper.inputText(form("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
-                @helper.inputText(form("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
+                @html5.tags.html.text(accountForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @html5.tags.html.text(accountForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
                     <!--<div class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
@@ -40,9 +40,9 @@
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
             }
 
-            @if(form.hasGlobalErrors) {
+            @if(accountForm.hasGlobalErrors) {
                 <p class="error">
-                @for(error <- form.globalErrors) {
+                @for(error <- accountForm.globalErrors) {
                     <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
                 }
                 </p>
