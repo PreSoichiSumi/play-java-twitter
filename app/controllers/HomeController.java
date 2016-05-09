@@ -16,6 +16,7 @@ import views.html.register;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.List;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -42,8 +43,21 @@ public class HomeController extends Controller {
         return ok(login.render(f));
     }
 
-    public Result login() {
-        return ok();
+    public Result login() { //dynamicform.get()...return null if the key does not exist
+        DynamicForm f = formfactory.form().bindFromRequest();
+        String userId = f.get("userId");
+        String pass = f.get("password");
+        if (userId == null || pass == null)
+            return badRequest("400 Bad Request");
+        List<User> res = null;
+
+        res = User.find.where().eq("userId", userId).eq("password", pass).findList();
+
+        if (res.size() == 1) {
+            return redirect("/");
+        } else {
+            return redirect("/login");
+        }
     }
 
     public Result registerPage() {

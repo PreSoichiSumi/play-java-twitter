@@ -14,9 +14,9 @@ import java.util.List;
 // uniqueでないuserを格納しようとするとExceptionを吐くのでそれを使ってバリデーションする．
 // see http://stackoverflow.com/questions/28906096/
 //          play-framework-2-3-how-to-add-unique-constraint-to-sample-application
-// undirectedは駄目っぽい
+// undirectedは駄目みたい
 // http://stackoverflow.com/questions/24464812/play-framework-2-ebean-manytoone-column-specified-twice
-// http://stackoverflow.com/questions/15591198/one-to-many-for-same-entity-class-in-play-framework
+// http://stackoverflow.com/questions/15591198/one-to-many-for-same-entity-class-in-play-framework ←よく参考になった
 
 @Entity
 public class User extends Model {
