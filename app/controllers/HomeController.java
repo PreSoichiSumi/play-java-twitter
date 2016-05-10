@@ -63,8 +63,21 @@ public class HomeController extends Controller {
         } else {
             //playはデフォルトでセッションにusernameが格納されているかでログイン状態を判断．
             //これに加えてセッションにCSRFTokenが正しく格納されているかでログイン状態を安全に判定できる
-            session("username", f.get().getUserId());
+            String userId = f.get().getUserId();
+            session("username", userId);
 
+            //マイページなど用にユーザデータをセッションに格納
+            try {
+                User u = User.find.where()
+                        .eq("user_id", userId).findUnique();
+                session("userId", u.userId);
+                session("userName", u.userName);
+                session("biography", u.biography);
+            } catch (Exception e) {
+                e.printStackTrace();
+                session().clear();
+                return redirect(routes.HomeController.loginPage());
+            }
             String returnUrl = ctx().session().get("returnUrl");
             if (returnUrl == null || Objects.equals(returnUrl, "")
                     || Objects.equals(returnUrl, routes.HomeController.loginPage().absoluteURL(request()))) {
@@ -74,10 +87,8 @@ public class HomeController extends Controller {
         }
     }
 
-    @Security.Authenticated(Secured.class)
-    public Result logout() {
-        session().clear();
-        return redirect(routes.HomeController.loginPage());
+    public Result myPage() {
+        return
     }
 
     public Result registerPage() {
@@ -99,8 +110,12 @@ public class HomeController extends Controller {
         } else {
             return redirect(routes.HomeController.registerPage());
         }
+    }
 
-
+    @Security.Authenticated(Secured.class)
+    public Result logout() {
+        session().clear();
+        return redirect(routes.HomeController.loginPage());
     }
 
 
