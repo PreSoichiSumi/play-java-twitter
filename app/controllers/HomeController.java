@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.Login;
 import models.Secured;
 import models.User;
 import play.data.DynamicForm;
@@ -49,20 +50,20 @@ public class HomeController extends Controller {
     //セッションにCSRFトークンを格納
     @AddCSRFToken
     public Result loginPage() {
-        Form<User> f = formfactory.form(User.class);
+        Form<Login> f = formfactory.form(Login.class);
         return ok(login.render(f));
     }
 
     //セッションに正しいCSRFトークンが格納されていないとリクエストを受け付けない(?)
     @RequireCSRFCheck
     public Result authenticate() { //dynamicform.get()...return null if the key does not exist
-        Form<User> f = formfactory.form(User.class).bindFromRequest();  //dynamicformはモデルに関係しないフォームデータを扱う場合に使用する
+        Form<Login> f = formfactory.form(Login.class).bindFromRequest();  //dynamicformはモデルに関係しないフォームデータを扱う場合に使用する
         if (f.hasErrors()) {
             return badRequest(login.render(f));
         } else {
             //playはデフォルトでセッションにusernameが格納されているかでログイン状態を判断．
             //これに加えてセッションにCSRFTokenが正しく格納されているかでログイン状態を安全に判定できる
-            session("username", f.get().userId);
+            session("username", f.get().getUserId());
 
             String returnUrl = ctx().session().get("returnUrl");
             if (returnUrl == null || Objects.equals(returnUrl, "")
@@ -92,11 +93,11 @@ public class HomeController extends Controller {
                 u.save();
             } catch (Exception e) {
                 e.printStackTrace();
-                return redirect("/register");
+                return redirect(routes.HomeController.registerPage());
             }
-            return redirect("/authenticate");
+            return redirect(routes.HomeController.loginPage());
         } else {
-            return redirect("/register");
+            return redirect(routes.HomeController.registerPage());
         }
 
 

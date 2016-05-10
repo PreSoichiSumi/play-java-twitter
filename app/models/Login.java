@@ -17,6 +17,8 @@ public class Login {
             message = "ユーザIDは英数字で構成され、4文字以上16文字以下です")
     private String userId;
     @Constraints.Required
+    @Constraints.Pattern(value = "\\w{4,16}",
+            message = "パスワードは英数字で構成され、4文字以上16文字以下です")
     private String password;
 
     /**
@@ -34,7 +36,7 @@ public class Login {
 
     public static User authenticate(String userId, String password)
             throws NoSuchAlgorithmException {
-        Model.Finder<Long, User> find = new Model.Finder<Long, User>(User.class);
+        Model.Finder<Long, User> find = new Model.Finder<>(User.class);
         String hashedPassword = "";
         if (password != null) {
             hashedPassword = sha512(password);
