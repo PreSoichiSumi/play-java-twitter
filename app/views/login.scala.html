@@ -4,7 +4,9 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-@(form: Form[User])
+@import helper._
+
+@(userForm: Form[User])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,16 +30,17 @@
         <div class="container">
 
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
-            @helper.form(action = routes.HomeController.login, 'class -> "form-signin") {
+            @form(action = routes.HomeController.authenticate, 'class -> "form-signin") {
                 <h3 class="form-signin-heading">Please Login</h3>
-                @helper.inputText(form("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
-                @helper.inputText(form("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
+                @inputText(userForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @inputText(userForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
                     <!--<div class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>-->
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                @CSRF.formField
             }
 
             <br><br>

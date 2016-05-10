@@ -31,8 +31,6 @@ public class User extends Model {
     public String userId;
 
     @Constraints.Required
-    @Constraints.Pattern(value = "\\w{4,16}",
-            message = "パスワードは英数字で構成され、4文字以上16文字以下です")
     public String password;
 
     public String userName;

@@ -2,6 +2,7 @@ import com.google.inject.Inject;
 import filters.CustomizedFilter;
 import play.Environment;
 import play.Mode;
+import play.filters.csrf.CSRFFilter;
 import play.filters.gzip.GzipFilter;
 import play.http.HttpFilters;
 import play.mvc.EssentialFilter;
@@ -28,6 +29,8 @@ public class Filters implements HttpFilters {
     @Inject
     CustomizedFilter customizedFilter;
 
+    @Inject
+    CSRFFilter csrfFilter;
 
 
     @Inject
@@ -41,9 +44,9 @@ public class Filters implements HttpFilters {
       // we're running in production or test mode then don't use any
       // filters at all.
       if (env.mode().equals(Mode.DEV)) {
-          return new EssentialFilter[] {gzipFilter.asJava()};
+          return new EssentialFilter[]{gzipFilter.asJava(), csrfFilter.asJava()};
       } else {
-         return new EssentialFilter[] {customizedFilter, gzipFilter.asJava()};
+          return new EssentialFilter[]{customizedFilter, gzipFilter.asJava(), csrfFilter.asJava()};
       }
     }
 

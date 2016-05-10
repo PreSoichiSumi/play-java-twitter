@@ -4,6 +4,7 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
+@import helper._
 @(accountForm: Form[User])
 
 <!DOCTYPE html>
@@ -28,7 +29,7 @@
         <div class="container">
 
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
-            @helper.form(action = routes.HomeController.register, 'class -> "form-signin") {
+            @form(action = routes.HomeController.register, 'class -> "form-signin") {
                 <h2 class="form-signin-heading">Please sign up</h2>
                 @html5.tags.html.text(accountForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
                 @html5.tags.html.text(accountForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
@@ -38,6 +39,7 @@
                     </label>
                 </div>-->
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+                @CSRF.formField
             }
 
             @if(accountForm.hasGlobalErrors) {

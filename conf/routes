@@ -13,10 +13,12 @@ GET         /message              controllers.AsyncController.message
 
 # sign in / up page
 GET         /login                controllers.HomeController.loginPage
-POST        /login                controllers.HomeController.login
+POST        /login                controllers.HomeController.authenticate
 
 GET         /register             controllers.HomeController.registerPage
 POST        /register             controllers.HomeController.register
+
+GET         /logout               controllers.HomeController.logout
 
 
 # Map static resources from the /public folder to the /assets URL path

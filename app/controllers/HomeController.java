@@ -1,14 +1,18 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.Secured;
 import models.User;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.data.FormFactory;
+import play.filters.csrf.AddCSRFToken;
+import play.filters.csrf.RequireCSRFCheck;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
+import play.mvc.Security;
 import util.ConvertionUtil;
 import views.html.index;
 import views.html.login;
@@ -16,7 +20,10 @@ import views.html.register;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+
+import static util.GeneralUtil.sha512;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -34,30 +41,42 @@ public class HomeController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
+    @Security.Authenticated(models.Secured.class)
     public Result index() {
         return ok(index.render());
     }
 
+    //セッションにCSRFトークンを格納
+    @AddCSRFToken
     public Result loginPage() {
         Form<User> f = formfactory.form(User.class);
         return ok(login.render(f));
     }
 
-    public Result login() { //dynamicform.get()...return null if the key does not exist
-        DynamicForm f = formfactory.form().bindFromRequest();
-        String userId = f.get("userId");
-        String pass = f.get("password");
-        if (userId == null || pass == null)
-            return badRequest("400 Bad Request");
-        List<User> res = null;
-
-        res = User.find.where().eq("userId", userId).eq("password", pass).findList();
-
-        if (res.size() == 1) {
-            return redirect("/");
+    //セッションに正しいCSRFトークンが格納されていないとリクエストを受け付けない(?)
+    @RequireCSRFCheck
+    public Result authenticate() { //dynamicform.get()...return null if the key does not exist
+        Form<User> f = formfactory.form(User.class).bindFromRequest();  //dynamicformはモデルに関係しないフォームデータを扱う場合に使用する
+        if (f.hasErrors()) {
+            return badRequest(login.render(f));
         } else {
-            return redirect("/login");
+            //playはデフォルトでセッションにusernameが格納されているかでログイン状態を判断．
+            //これに加えてセッションにCSRFTokenが正しく格納されているかでログイン状態を安全に判定できる
+            session("username", f.get().userId);
+
+            String returnUrl = ctx().session().get("returnUrl");
+            if (returnUrl == null || Objects.equals(returnUrl, "")
+                    || Objects.equals(returnUrl, routes.HomeController.loginPage().absoluteURL(request()))) {
+                returnUrl = routes.HomeController.index().url();
+            }
+            return redirect(returnUrl);
         }
+    }
+
+    @Security.Authenticated(Secured.class)
+    public Result logout() {
+        session().clear();
+        return redirect(routes.HomeController.loginPage());
     }
 
     public Result registerPage() {
@@ -65,19 +84,17 @@ public class HomeController extends Controller {
         return ok(register.render(f));
     }
 
-    public Result register() {
-        DynamicForm f = formfactory.form().bindFromRequest();
+    public Result register() throws NoSuchAlgorithmException {
+        Form<User> f = formfactory.form(User.class).bindFromRequest();
         if (!f.hasErrors()) {
-            String userId = f.get("userId");
-            String password = f.get("password");
-            User u = new User(userId, password);
+            User u = new User(f.get().userId, sha512(f.get().password));
             try {
                 u.save();
             } catch (Exception e) {
                 e.printStackTrace();
                 return redirect("/register");
             }
-            return redirect("/login");
+            return redirect("/authenticate");
         } else {
             return redirect("/register");
         }
@@ -115,5 +132,6 @@ public class HomeController extends Controller {
             return true;
         return false;
     }
+
 
 }
