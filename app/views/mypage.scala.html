@@ -5,8 +5,7 @@
 * object to insert into the body of the page.
 *@
 @import helper._
-
-@(userForm: Form[Login])
+@(accountForm: Form[User])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,33 +29,25 @@
         <div class="container">
 
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
-            @form(action = routes.HomeController.authenticate, 'class -> "form-signin") {
-                <h3 class="form-signin-heading">Please Login</h3>
-                @inputText(userForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
-                @inputText(userForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
+            @form(action = routes.HomeController.register, 'class -> "form-signin") {
+                <h2 class="form-signin-heading">Please sign up</h2>
+                @html5.tags.html.text(accountForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @html5.tags.html.text(accountForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
                     <!--<div class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>-->
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
                 @CSRF.formField
             }
 
-            @if(userForm.hasGlobalErrors) {
+            @if(accountForm.hasGlobalErrors) {
                 <p class="error">
-                @for(error <- userForm.globalErrors) {
+                @for(error <- accountForm.globalErrors) {
                     <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
                 }
                 </p>
-            }
-
-            <br><br>
-
-
-            @helper.form(action = routes.HomeController.registerPage, 'class -> "form-signin", 'method -> "get") {
-                <h3 class="form-signin-heading">...Or register account</h3>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Register Account</button>
             }
 
         </div> <!-- /container -->
