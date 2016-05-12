@@ -1,4 +1,7 @@
-@(tweets: List[Tweet])
+@import helper._
+
+@(tweetForm: Form[Tweet])
+
 <!DOCTYPE html>
 <html lang="jp">
     <head>
@@ -27,7 +30,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="">Menu
-                                <span class="caret"></span> </a>
+                                <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href=@routes.HomeController.loginPage()>login</a></li>
                                 <li><a href=@routes.HomeController.logout()>logout</a></li>
@@ -35,22 +38,38 @@
                                 <li><a href="">MyPage</a></li>
                             </ul>
                         </li>
-                        <li> <button class="btn btn-primary navbar-btn" type="button">ツイート</button></li>
+                        <li> <button class="btn btn-primary navbar-btn" type="button" onclick="location.href =@routes.HomeController.tweetPage">
+                            ツイート</button></li>
                     </ul>
                 </div>
             </div>
         </nav>
         <div class="container">
+            @form(action = routes.HomeController.register, 'class -> "form-signin") {
+                <h2 class="form-signin-heading">Please sign up</h2>
+                @html5.tags.html.text(tweetForm("content"), 'id -> "inputPassword",
+                    'class -> "form-control", 'placeholder -> "what's up brother?",
+                    '_showConstraints -> false, '_label -> null)
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Tweet</button>
+                @CSRF.formField
+            }
 
-            @timeline(tweets)
+            @if(tweetForm.hasGlobalErrors) {
+                <p class="error">
+                @for(error <- tweetForm.globalErrors) {
+                    <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
+                }
+                </p>
+            }
 
-        <footer>
-            <div class="row col-lg-12">
-                <ul class="list-unstyled">
-                    <li>&copy; yousei 2016</li>
-                </ul>
-            </div>
-        </footer>
+
+            <footer>
+                <div class="row col-lg-12">
+                    <ul class="list-unstyled">
+                        <li>&copy; yousei 2016</li>
+                    </ul>
+                </div>
+            </footer>
         </div>
     </body>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">

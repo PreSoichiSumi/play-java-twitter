@@ -4,7 +4,9 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
+
 @import helper._
+
 @(accountForm: Form[User])
 
 <!DOCTYPE html>
@@ -45,7 +47,7 @@
             @if(accountForm.hasGlobalErrors) {
                 <p class="error">
                 @for(error <- accountForm.globalErrors) {
-                    <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
+                    <p>@Messages(error.messages, error.arguments.toArray: _*) </p>
                 }
                 </p>
             }

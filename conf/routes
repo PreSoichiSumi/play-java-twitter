@@ -18,6 +18,9 @@ POST        /login                controllers.HomeController.authenticate
 GET         /register             controllers.HomeController.registerPage
 POST        /register             controllers.HomeController.register
 
+GET         /tweet                controllers.HomeController.tweetPage
+POST        /tweet                controllers.HomeController.tweet
+
 GET         /logout               controllers.HomeController.logout
 
 

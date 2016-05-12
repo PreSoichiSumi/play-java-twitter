@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Login;
 import models.Secured;
+import models.Tweet;
 import models.User;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -15,36 +16,27 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import play.mvc.Security;
 import util.ConvertionUtil;
-import views.html.index;
-import views.html.login;
-import views.html.register;
+import views.html.*;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static util.GeneralUtil.sha512;
 
-/**
- * This controller contains an action to handle HTTP requests
- * to the application's home page.
- */
 public class HomeController extends Controller {
     @Inject
     WebJarAssets webJarAssets;
     @Inject
     FormFactory formfactory;
 
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
     @Security.Authenticated(models.Secured.class)
     public Result index() {
-        return ok(index.render());
+        List<Tweet> f = new ArrayList<>();
+        return ok(index.render(f));
     }
 
     //セッションにCSRFトークンを格納
@@ -82,13 +74,39 @@ public class HomeController extends Controller {
             if (returnUrl == null || Objects.equals(returnUrl, "")
                     || Objects.equals(returnUrl, routes.HomeController.loginPage().absoluteURL(request()))) {
                 returnUrl = routes.HomeController.index().url();
+                return ok(index.render(new ArrayList<Tweet>()));
             }
             return redirect(returnUrl);
         }
     }
 
+    @Security.Authenticated(models.Secured.class)
+    public Result tweetPage() {
+        Form<Tweet> f = formfactory.form(Tweet.class);
+        return ok(tweet.render(f));
+    }
+
+    @RequireCSRFCheck
+    public Result tweet() {
+        Form<Tweet> f = formfactory.form(Tweet.class).bindFromRequest();
+        if (f.hasErrors()) {
+            Tweet t = new Tweet(session("userId"), f.get().content);
+            try {
+                t.save();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return redirect(routes.HomeController.tweetPage());
+            }
+            return redirect(routes.HomeController.index());
+        } else {
+            return redirect(routes.HomeController.tweetPage());
+        }
+    }
+
+    @Security.Authenticated(models.Secured.class)
     public Result myPage() {
-        return
+        Form<User> f = formfactory.form(User.class);
+        return ok(mypage.render(f));
     }
 
     public Result registerPage() {

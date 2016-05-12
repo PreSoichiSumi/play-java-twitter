@@ -18,7 +18,7 @@
         <meta name="author" content="">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
 
-        <title>Sign in / Sign up</title>
+        <title>YourPage</title>
 
             <!-- Custom styles for this template -->
 
@@ -27,10 +27,9 @@
 
     <body>
         <div class="container">
-
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
-            @form(action = routes.HomeController.register, 'class -> "form-signin") {
-                <h2 class="form-signin-heading">Please sign up</h2>
+            @form(action = routes.HomeController.loginPage, 'class -> "form-signin") {
+                <h2 class="form-signin-heading">登録情報の変更</h2>
                 @html5.tags.html.text(accountForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
                 @html5.tags.html.text(accountForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
                     <!--<div class="checkbox">

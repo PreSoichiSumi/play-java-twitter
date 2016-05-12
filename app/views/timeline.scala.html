@@ -4,6 +4,7 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
+@(tweets: List[Tweet])
 <div class="page-header" id="banner">
     <div class="row">
         <h1></h1> <h3></h3>
@@ -16,6 +17,9 @@
             </div>
         </div>
         <ul class="list-group col-lg-9 col-md-9 col-sm-8">
+            @for(tweet <- tweets) {
+                <li class="list-group-item">@tweet.content</li>
+            }
             <li class="list-group-item">unko</li>
             <li class="list-group-item">Dapibus ac facilisis in</li>
             <li class="list-group-item">Morbi leo risus</li>

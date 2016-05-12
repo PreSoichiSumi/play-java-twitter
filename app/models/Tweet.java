@@ -31,4 +31,13 @@ public class Tweet extends Model {
     public User user;
 
     public static Finder<Long, Tweet> find = new Finder<Long, Tweet>(Tweet.class);
+
+    public Tweet() {
+        super();
+    }
+
+    public Tweet(String userId, String content) {
+        this.userId = userId;
+        this.content = content;
+    }
 }
