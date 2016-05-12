@@ -62,6 +62,11 @@ public class HomeController extends Controller {
             try {
                 User u = User.find.where()
                         .eq("user_id", userId).findUnique();
+
+                //このnullチェックについて．session(key)の仕様を考えればまあわかる
+                //http://webcache.googleusercontent.com/search?
+                // q=cache:fSj3W9xRfswJ:microscopium.eyesaac.com/2015/11/27/play2redirect/+&cd=3
+                // &hl=ja&ct=clnk&gl=jp
                 if (u.userId != null)
                     session("userId", u.userId);
 
