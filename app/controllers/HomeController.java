@@ -62,9 +62,15 @@ public class HomeController extends Controller {
             try {
                 User u = User.find.where()
                         .eq("user_id", userId).findUnique();
-                session("userId", u.userId);
-                session("userName", u.userName);
-                session("biography", u.biography);
+                if (u.userId != null)
+                    session("userId", u.userId);
+
+                if (u.userName != null)
+                    session("userName", u.userName);
+
+                if (u.biography != null)
+                    session("biography", u.biography);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 session().clear();
