@@ -80,7 +80,6 @@ public class HomeController extends Controller {
             if (returnUrl == null || Objects.equals(returnUrl, "")
                     || Objects.equals(returnUrl, routes.HomeController.loginPage().absoluteURL(request()))) {
                 returnUrl = routes.HomeController.index().url();
-                return ok(index.render(new ArrayList<Tweet>()));
             }
             return redirect(returnUrl);
         }
