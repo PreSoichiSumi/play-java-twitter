@@ -5,7 +5,6 @@ import com.avaje.ebean.annotation.CreatedTimestamp;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -17,8 +16,7 @@ public class Tweet extends Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long tweetId;
 
-    @NotNull
-    public String userId;
+    public String tw_userId;
 
     @CreatedTimestamp
     public Date postDate;
@@ -37,7 +35,7 @@ public class Tweet extends Model {
     }
 
     public Tweet(String userId, String content) {
-        this.userId = userId;
+        this.tw_userId = userId;
         this.content = content;
     }
 }

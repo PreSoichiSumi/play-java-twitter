@@ -21,7 +21,6 @@ import views.html.*;
 import javax.inject.Inject;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,8 +34,11 @@ public class HomeController extends Controller {
 
     @Security.Authenticated(models.Secured.class)
     public Result index() {
-        List<Tweet> f = new ArrayList<>();
-        return ok(index.render(f));
+        List<Tweet> list = Tweet.find.where()
+                .eq("tw_user_id", session("userId"))
+                .findList();
+
+        return ok(index.render(list));
     }
 
     //セッションにCSRFトークンを格納
@@ -99,7 +101,7 @@ public class HomeController extends Controller {
     @RequireCSRFCheck
     public Result tweet() {
         Form<Tweet> f = formfactory.form(Tweet.class).bindFromRequest();
-        if (f.hasErrors()) {
+        if (!f.hasErrors()) {
             Tweet t = new Tweet(session("userId"), f.get().content);
             try {
                 t.save();

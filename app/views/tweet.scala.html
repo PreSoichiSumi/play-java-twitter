@@ -45,7 +45,7 @@
             </div>
         </nav>
         <div class="container">
-            @form(action = routes.HomeController.register, 'class -> "form-signin") {
+            @form(action = routes.HomeController.tweet, 'class -> "form-signin") {
                 <h2 class="form-signin-heading">Please sign up</h2>
                 @html5.tags.html.text(tweetForm("content"), 'id -> "inputPassword",
                     'class -> "form-control", 'placeholder -> "what's up brother?",
