@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,8 +40,9 @@ public class HomeController extends Controller {
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
                 .findUnique();
-        List<Tweet> list = u == null ? new ArrayList<>() :
-                (u.tweets == null ? new ArrayList<>() : u.tweets);
+        List<Tweet> list = (u == null || u.tweets == null) ?
+                new ArrayList<>() : u.tweets;
+        Collections.reverse(list);
         return ok(index.render(list));
     }
 

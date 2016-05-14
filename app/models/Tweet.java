@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
+import com.avaje.ebean.annotation.Index;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Date;
 public class Tweet extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Index
     public Long tweetId;
 
     @CreatedTimestamp

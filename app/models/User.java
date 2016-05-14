@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.avaje.ebean.annotation.Index;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class User extends Model {
     @Constraints.Pattern(value = "\\w{4,16}",
             message = "ユーザIDは英数字で構成され、4文字以上16文字以下です")
     @Column(unique = true)
+    @Index
     public String user_id;
 
     @Constraints.Required
