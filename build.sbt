@@ -43,3 +43,7 @@ mappings in Universal += (((target in Universal).value / "lib" / "classpath.jar"
 // client side validation with play form helper
 // https://github.com/loicdescotte/Play2-HTML5Tags
 resolvers += Resolver.url("github repo for html5tags", url("http://loicdescotte.github.io/Play2-HTML5Tags/releases/"))(Resolver.ivyStylePatterns)
+
+//Reload失敗対策
+//PlayKeys.playWatchService := play.sbtplugin.run.PlayWatchService.sbt(pollInterval.value)
+fork in run := false

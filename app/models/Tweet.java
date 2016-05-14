@@ -16,8 +16,6 @@ public class Tweet extends Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long tweetId;
 
-    public String tw_userId;
-
     @CreatedTimestamp
     public Date postDate;
 
@@ -34,8 +32,7 @@ public class Tweet extends Model {
         super();
     }
 
-    public Tweet(String userId, String content) {
-        this.tw_userId = userId;
+    public Tweet(String content) {
         this.content = content;
     }
 }

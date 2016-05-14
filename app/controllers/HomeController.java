@@ -14,6 +14,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
+import play.mvc.Results;
 import play.mvc.Security;
 import util.ConvertionUtil;
 import views.html.*;
@@ -21,6 +22,7 @@ import views.html.*;
 import javax.inject.Inject;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,10 +36,11 @@ public class HomeController extends Controller {
 
     @Security.Authenticated(models.Secured.class)
     public Result index() {
-        List<Tweet> list = Tweet.find.where()
-                .eq("tw_user_id", session("userId"))
-                .findList();
-
+        User u = User.find.where()
+                .eq("user_id", session("user_id"))
+                .findUnique();
+        List<Tweet> list = u == null ? new ArrayList<>() :
+                (u.tweets == null ? new ArrayList<>() : u.tweets);
         return ok(index.render(list));
     }
 
@@ -69,11 +72,11 @@ public class HomeController extends Controller {
                 //http://webcache.googleusercontent.com/search?
                 // q=cache:fSj3W9xRfswJ:microscopium.eyesaac.com/2015/11/27/play2redirect/+&cd=3
                 // &hl=ja&ct=clnk&gl=jp
-                if (u.userId != null)
-                    session("userId", u.userId);
+                if (u.user_id != null)
+                    session("user_id", u.user_id);
 
-                if (u.userName != null)
-                    session("userName", u.userName);
+                if (u.user_name != null)
+                    session("user_name", u.user_name);
 
                 if (u.biography != null)
                     session("biography", u.biography);
@@ -102,12 +105,14 @@ public class HomeController extends Controller {
     public Result tweet() {
         Form<Tweet> f = formfactory.form(Tweet.class).bindFromRequest();
         if (!f.hasErrors()) {
-            Tweet t = new Tweet(session("userId"), f.get().content);
+            Tweet t = new Tweet(f.get().content);
             try {
+                t.user = User.find.where().eq("user_id", session("user_id")).findUnique();
                 t.save();
             } catch (Exception e) {
                 e.printStackTrace();
-                return redirect(routes.HomeController.tweetPage());
+                //return redirect(routes.HomeController.tweetPage());
+                return internalServerError(tweet.render(f));
             }
             return redirect(routes.HomeController.index());
         } else {
@@ -129,16 +134,16 @@ public class HomeController extends Controller {
     public Result register() throws NoSuchAlgorithmException {
         Form<User> f = formfactory.form(User.class).bindFromRequest();
         if (!f.hasErrors()) {
-            User u = new User(f.get().userId, sha512(f.get().password));
+            User u = new User(f.get().user_id, sha512(f.get().password));
             try {
                 u.save();
             } catch (Exception e) {
                 e.printStackTrace();
-                return redirect(routes.HomeController.registerPage());
+                return Results.badRequest(register.render(f));
             }
             return redirect(routes.HomeController.loginPage());
         } else {
-            return redirect(routes.HomeController.registerPage());
+            return Results.badRequest(register.render(f));
         }
     }
 

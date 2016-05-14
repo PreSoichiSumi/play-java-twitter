@@ -33,7 +33,7 @@
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
             @form(action = routes.HomeController.register, 'class -> "form-signin") {
                 <h2 class="form-signin-heading">Please sign up</h2>
-                @html5.tags.html.text(accountForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @html5.tags.html.text(accountForm("user_id"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
                 @html5.tags.html.text(accountForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
                     <!--<div class="checkbox">
                     <label>
