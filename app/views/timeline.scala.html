@@ -4,7 +4,9 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-@(tweets: List[Tweet])
+@import helper._
+
+@(tweets: List[Tweet], tweetForm: Form[Tweet])
 <div class="page-header" id="banner">
     <div class="row">
         <h1></h1> <h3></h3>
@@ -16,13 +18,34 @@
                 heiheihei~~^
             </div>
         </div>
-        <ul class="list-group col-lg-9 col-md-9 col-sm-8">
-            <textarea class="form-control"></textarea><br />
-            <button class="btn btn-primary pull-right">Tweet</button>
-            @for(tweet <- tweets) {
-                <li class="list-group-item">@tweet.content</li>
-            }
-        </ul>
+        <div class="col-lg-9 col-md-9 col-sm-8">
+            <div class="row">
+                @form(action = routes.HomeController.tweet) {
+                    @textarea(tweetForm("content"), 'class -> "form-control",
+                        'placeholder -> "what's up, brother?",
+                        '_showConstraints -> false, '_label -> null)
+                    <button class="btn btn-primary pull-right">Tweet</button>
+                    @CSRF.formField
+                }
+
+                @if(tweetForm.hasGlobalErrors) {
+                    <p class="error">
+                    @for(error <- tweetForm.globalErrors) {
+                        <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
+                    }
+                    </p>
+                }
+            </div>
+            <div class="row">
+                <ul class="list-group top-buffer">
+
+                @for(tweet <- tweets) {
+                    <li class="list-group-item">@tweet.content</li>
+                }
+                </ul>
+            </div>
+
+        </div>
     </div>
 </div>
 
