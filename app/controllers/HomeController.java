@@ -1,22 +1,17 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Login;
 import models.Secured;
 import models.Tweet;
 import models.User;
-import play.data.DynamicForm;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.mvc.Security;
-import util.ConvertionUtil;
 import views.html.*;
 
 import javax.inject.Inject;
@@ -153,29 +148,6 @@ public class HomeController extends Controller {
     public Result logout() {
         session().clear();
         return redirect(routes.HomeController.loginPage());
-    }
-
-
-    /**
-     * ファイルはフォームデータの一部として送られてこない．
-     * フォームのデータに添付されて送られてくる．
-     * http://stackoverflow.com/questions/9452375/how-to-get-the-upload-file-with-other-inputs-in-play2#9587052
-     *
-     * @return
-     */
-    public Result aaConvert() {
-        MultipartFormData.FilePart picture = request().body().asMultipartFormData().getFile("picture");
-        //Map<String,String[]> form= request().body(). asMultipartFormData().asFormUrlEncoded();//checkboxは値がないときにはmapに要素すら無いので注意
-        DynamicForm form = formfactory.form().bindFromRequest();
-        if (picture != null) {
-            File file = (File) picture.getFile();
-
-            String aa = ConvertionUtil.aaConvertion(file, form);
-            ObjectNode result = Json.newObject();
-            result.put("aa", aa);
-            return ok(result);
-        }
-        return badRequest("picture is null");
     }
 
     public boolean isPicture(File file) {
