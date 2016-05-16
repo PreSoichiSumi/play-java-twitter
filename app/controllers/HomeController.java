@@ -38,7 +38,7 @@ public class HomeController extends Controller {
         List<Tweet> list = (u == null || u.tweets == null) ?
                 new ArrayList<>() : u.tweets;
         Collections.reverse(list);
-        return ok(index.render(list));
+        return ok(index.render(list, formfactory.form(Tweet.class)));
     }
 
     //セッションにCSRFトークンを格納
@@ -64,8 +64,7 @@ public class HomeController extends Controller {
             try {
                 User u = User.find.where()
                         .eq("user_id", userId).findUnique();
-
-                //このnullチェックについて．session(key)の仕様を考えればまあわかる
+                //以下のnullチェックについて．session(key)の仕様を考えればまあわかる
                 //http://webcache.googleusercontent.com/search?
                 // q=cache:fSj3W9xRfswJ:microscopium.eyesaac.com/2015/11/27/play2redirect/+&cd=3
                 // &hl=ja&ct=clnk&gl=jp
