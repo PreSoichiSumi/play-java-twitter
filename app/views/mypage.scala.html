@@ -5,7 +5,7 @@
 * object to insert into the body of the page.
 *@
 @import helper._
-@(accountForm: Form[User])
+@(propertyForm: Form[UserProperty])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,7 @@
         <meta name="author" content="">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
 
-        <title>YourPage</title>
+        <title>ChangeProperty</title>
 
             <!-- Custom styles for this template -->
 
@@ -28,22 +28,21 @@
     <body>
         <div class="container">
                 <!--TODO フォームヘルパーの自作．ラベルいらない-->
-            @form(action = routes.HomeController.loginPage, 'class -> "form-signin") {
-                <h2 class="form-signin-heading">登録情報の変更</h2>
-                @html5.tags.html.text(accountForm("userId"), 'id -> "inputUserId", 'class -> "form-control", 'placeholder -> "UserID", 'required -> true, 'autofocus -> true, '_showConstraints -> false, '_label -> null)
-                @html5.tags.html.text(accountForm("password"), 'id -> "inputPassword", 'class -> "form-control", 'placeholder -> "Password", '_showConstraints -> false, '_label -> null)
-                    <!--<div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                </div>-->
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            @form(action = routes.HomeController.changeProperty, 'class -> "form-signin") {
+                <h2 class="form-signin-heading">ユーザ情報の変更</h2>
+                @html5.tags.html.text(propertyForm("userName"), 'id -> "inputUserId",
+                    'class -> "form-control", 'placeholder -> "UserName", 'required -> true,
+                    'autofocus -> true, '_showConstraints -> false, '_label -> null)
+                @html5.tags.html.text(propertyForm("biography"), 'id -> "inputPassword",
+                    'class -> "form-control", 'placeholder -> "Biography",
+                    '_showConstraints -> false, '_label -> null)
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
                 @CSRF.formField
             }
 
-            @if(accountForm.hasGlobalErrors) {
+            @if(propertyForm.hasGlobalErrors) {
                 <p class="error">
-                @for(error <- accountForm.globalErrors) {
+                @for(error <- propertyForm.globalErrors) {
                     <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
                 }
                 </p>

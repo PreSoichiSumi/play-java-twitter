@@ -1,9 +1,6 @@
 package controllers;
 
-import models.Login;
-import models.Secured;
-import models.Tweet;
-import models.User;
+import models.*;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -12,7 +9,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.mvc.Security;
-import views.html.*;
+import views.html.index;
+import views.html.login;
+import views.html.mypage;
+import views.html.register;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -90,7 +90,7 @@ public class HomeController extends Controller {
             } catch (Exception e) {
                 e.printStackTrace();
                 session().clear();
-                return redirect(routes.HomeController.loginPage());
+                return redirect(routes.HomeController.index());
             }
             String returnUrl = ctx().session().get("returnUrl");
             if (returnUrl == null || Objects.equals(returnUrl, "")
@@ -99,12 +99,6 @@ public class HomeController extends Controller {
             }
             return redirect(returnUrl);
         }
-    }
-
-    @Security.Authenticated(models.Secured.class)
-    public Result tweetPage() {
-        Form<Tweet> f = formfactory.form(Tweet.class);
-        return ok(tweet.render(f));
     }
 
     @RequireCSRFCheck
@@ -118,18 +112,45 @@ public class HomeController extends Controller {
             } catch (Exception e) {
                 e.printStackTrace();
                 //return redirect(routes.HomeController.tweetPage());
-                return internalServerError(tweet.render(f));
+                return redirect(routes.HomeController.index());
             }
             return redirect(routes.HomeController.index());
         } else {
-            return redirect(routes.HomeController.tweetPage());
+            return redirect(routes.HomeController.index());
         }
     }
 
     @Security.Authenticated(models.Secured.class)
     public Result myPage() {
-        Form<User> f = formfactory.form(User.class);
+        Form<UserProperty> f = formfactory.form(UserProperty.class);
         return ok(mypage.render(f));
+    }
+
+    @RequireCSRFCheck
+    public Result changeProperty() {
+        Form<UserProperty> f = formfactory.form(UserProperty.class).bindFromRequest();
+        if (!f.hasErrors()) {
+            User u = User.find.where()
+                    .eq("user_id", session("user_id"))
+                    .findUnique();
+
+            UserProperty up = f.get();
+            if (up.userName != null)
+                u.user_name = up.userName;
+
+            if (up.biography != null)
+                u.biography = up.biography;
+
+            try {
+                u.save();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return redirect(routes.HomeController.changeProperty());
+            }
+            return redirect(routes.HomeController.index());
+        } else {
+            return Results.badRequest(mypage.render(f));
+        }
     }
 
     public Result registerPage() {
