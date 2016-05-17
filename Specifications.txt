@@ -1,0 +1,4 @@
+session
+- user_id   ユーザID  ユーザ固有のID
+- user_name タイムラインに表示されるユーザ名
+- biography ユーザの紹介文

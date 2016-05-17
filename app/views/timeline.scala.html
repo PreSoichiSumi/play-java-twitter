@@ -6,7 +6,7 @@
 *@
 @import helper._
 
-@(tweets: List[Tweet], tweetForm: Form[Tweet])
+@(tweets: List[Tweet], tweetForm: Form[Tweet], userName: String, content: String)
 <div class="page-header" id="banner">
     <div class="row">
         <h1></h1> <h3></h3>
@@ -14,8 +14,8 @@
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-4">
             <div class="well well-sm well-lg">
-                <h3>Yousei</h3>
-                heiheihei~~^
+                <h3>@userName</h3>
+                @content
             </div>
         </div>
         <div class="col-lg-9 col-md-9 col-sm-8">

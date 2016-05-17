@@ -35,10 +35,20 @@ public class HomeController extends Controller {
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
                 .findUnique();
+
         List<Tweet> list = (u == null || u.tweets == null) ?
                 new ArrayList<>() : u.tweets;
         Collections.reverse(list);
-        return ok(index.render(list, formfactory.form(Tweet.class)));
+
+        String userName = session("user_name");
+        if (userName == null)
+            userName = "NONAME";
+
+        String content = session("biography");
+        if (content == null)
+            content = "let's write an introduction of yourself!";
+
+        return ok(index.render(list, formfactory.form(Tweet.class), userName, content));
     }
 
     //セッションにCSRFトークンを格納
@@ -64,7 +74,7 @@ public class HomeController extends Controller {
             try {
                 User u = User.find.where()
                         .eq("user_id", userId).findUnique();
-                //以下のnullチェックについて．session(key)の仕様を考えればまあわかる
+                //以下のnullチェックについて．session(key)がkeyが無いときにnullを返すことから必要
                 //http://webcache.googleusercontent.com/search?
                 // q=cache:fSj3W9xRfswJ:microscopium.eyesaac.com/2015/11/27/play2redirect/+&cd=3
                 // &hl=ja&ct=clnk&gl=jp
