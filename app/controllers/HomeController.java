@@ -135,11 +135,15 @@ public class HomeController extends Controller {
                     .findUnique();
 
             UserProperty up = f.get();
-            if (up.userName != null)
+            if (up.userName != null) {
                 u.user_name = up.userName;
+                session("user_name",u.user_name);
+            }
 
-            if (up.biography != null)
+            if (up.biography != null) {
                 u.biography = up.biography;
+                session("biography",u.biography);
+            }
 
             try {
                 u.save();
