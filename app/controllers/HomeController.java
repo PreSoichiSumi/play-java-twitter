@@ -48,7 +48,7 @@ public class HomeController extends Controller {
         if (content == null)
             content = "let's write an introduction of yourself!";
 
-        return ok(index.render(list, formfactory.form(Tweet.class), userName, content));
+        return ok(index.render(list, formfactory.form(Tweet.class), u));
     }
 
     //セッションにCSRFトークンを格納
