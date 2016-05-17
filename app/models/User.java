@@ -39,6 +39,9 @@ public class User extends Model {
 
     public String biography;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    public UserIcon user_icon;
+
     @OneToMany(cascade = CascadeType.ALL)
     public List<Tweet> tweets;
 
