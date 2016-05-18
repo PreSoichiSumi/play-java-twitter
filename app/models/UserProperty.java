@@ -13,4 +13,13 @@ public class UserProperty {
     @Constraints.Pattern(message = "プロフィールは英数字で0-140文字です．",
             value = "\\w{0,140}")
     public String biography;
+
+    public UserProperty() {
+        super();
+    }
+
+    public UserProperty(String userName, String biography) {
+        this.userName = userName;
+        this.biography = biography;
+    }
 }

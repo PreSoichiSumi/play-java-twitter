@@ -29,11 +29,11 @@
                 }
 
                 @if(tweetForm.hasGlobalErrors) {
-                    <p class="error">
+                    <div class="error">
                     @for(error <- tweetForm.globalErrors) {
                         <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
                     }
-                    </p>
+                    </div>
                 }
             </div>
             <div class="row">

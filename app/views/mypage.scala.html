@@ -5,7 +5,7 @@
 * object to insert into the body of the page.
 *@
 @import helper._
-@(propertyForm: Form[UserProperty])
+@(propertyForm: Form[UserProperty],userData:User)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,26 +23,26 @@
 
     <body>
         <div class="container">
-                <!--TODO フォームヘルパーの自作．ラベルいらない-->
             @form(action = routes.HomeController.changeProperty, 'class -> "form-signin") {
                 <h2 class="form-signin-heading">ユーザ情報の変更</h2>
                 @html5.tags.html.text(propertyForm("userName"), 'id -> "inputUserId",
-                    'class -> "form-control", 'placeholder -> "UserName", 'required -> true,
-                    'autofocus -> true, '_showConstraints -> false, '_label -> null)
-                @html5.tags.html.text(propertyForm("biography"), 'id -> "inputPassword",
-                    'class -> "form-control", 'placeholder -> "Biography",
-                    '_showConstraints -> false, '_label -> null)
+                    'class -> "form-control", 'required -> true,
+                    'autofocus -> true, '_showConstraints -> false, '_label -> "UserName")
+                @html5.tags.html.textarea(propertyForm("biography"), 'id -> "inputPassword",
+                    'class -> "form-control",
+                    '_showConstraints -> false, '_label -> "Biography")
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
                 @CSRF.formField
             }
 
             @if(propertyForm.hasGlobalErrors) {
-                <p class="error">
+                <div class="error">
                 @for(error <- propertyForm.globalErrors) {
                     <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
                 }
-                </p>
+                </div>
             }
+
 
         </div> <!-- /container -->
 

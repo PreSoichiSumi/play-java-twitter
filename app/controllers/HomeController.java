@@ -32,21 +32,30 @@ public class HomeController extends Controller {
 
     @Security.Authenticated(models.Secured.class)
     public Result index() {
+        if(session("user_id")==null)
+            return redirect(routes.HomeController.loginPage());
+
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
                 .findUnique();
 
-        List<Tweet> list = (u == null || u.tweets == null) ?
-                new ArrayList<>() : u.tweets;
+        if(u==null)
+            return redirect(routes.HomeController.loginPage());
+
+        List<Tweet> list =
+                u.tweets == null ? new ArrayList<>() : u.tweets;
         Collections.reverse(list);
 
         String userName = session("user_name");
-        if (userName == null)
+        if (userName == null || Objects.equals(userName,""))
             userName = "NONAME";
 
         String content = session("biography");
-        if (content == null)
+        if (content == null || Objects.equals(content,""))
             content = "let's write an introduction of yourself!";
+
+        u.user_name=userName;
+        u.biography=content;
 
         return ok(index.render(list, formfactory.form(Tweet.class), u));
     }
@@ -122,18 +131,22 @@ public class HomeController extends Controller {
 
     @Security.Authenticated(models.Secured.class)
     public Result myPage() {
-        Form<UserProperty> f = formfactory.form(UserProperty.class);
-        return ok(mypage.render(f));
+        User u = User.find.where()
+                .eq("user_id", session("user_id"))
+                .findUnique();
+
+        Form<UserProperty> f = formfactory.form(UserProperty.class)
+                .fill(new UserProperty(u.user_name,u.biography));
+        return ok(mypage.render(f,u));
     }
 
     @RequireCSRFCheck
     public Result changeProperty() {
         Form<UserProperty> f = formfactory.form(UserProperty.class).bindFromRequest();
+        User u = User.find.where()
+                .eq("user_id", session("user_id"))
+                .findUnique();
         if (!f.hasErrors()) {
-            User u = User.find.where()
-                    .eq("user_id", session("user_id"))
-                    .findUnique();
-
             UserProperty up = f.get();
             if (up.userName != null) {
                 u.user_name = up.userName;
@@ -153,7 +166,7 @@ public class HomeController extends Controller {
             }
             return redirect(routes.HomeController.index());
         } else {
-            return Results.badRequest(mypage.render(f));
+            return Results.badRequest(mypage.render(f,u));
         }
     }
 
