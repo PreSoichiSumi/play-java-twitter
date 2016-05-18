@@ -6,10 +6,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Results;
-import play.mvc.Security;
+import play.mvc.*;
 import views.html.index;
 import views.html.login;
 import views.html.mypage;
@@ -200,6 +197,32 @@ public class HomeController extends Controller {
         } else
             return ok(u.user_icon.data).as("image");
     }
+
+    @Security.Authenticated(models.Secured.class)
+    public Result uploadIcon() {
+        Http.MultipartFormData.FilePart picture=request()
+                .body()
+                .asMultipartFormData()
+                .getFile("picture");
+        if(picture!=null) {
+            File file=(File)picture.getFile();
+
+            String uid = session("user_id");
+            if (uid == null)
+                return Results.redirect(routes.HomeController.loginPage());
+            User u = User.find.where()
+                    .eq("user_id", uid)
+                    .findUnique();
+            if (u == null)
+                return Results.redirect(routes.HomeController.loginPage());
+
+            UserIcon ui=new UserIcon(file);
+            u.user_icon=ui;
+            u.update();
+        }
+        return badRequest();
+    }
+
 
     public Result registerPage() {
         Form<User> f = formfactory.form(User.class);

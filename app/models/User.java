@@ -60,5 +60,5 @@ public class User extends Model {
         this.password = password;
     }
 
-    public static Finder<Long, User> find = new Finder<Long, User>(User.class);//(class,class)...deprecated
+    public static Finder<Long, User> find = new Finder<>(User.class);//(class,class)...deprecated
 }
