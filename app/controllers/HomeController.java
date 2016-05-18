@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import org.apache.commons.compress.utils.IOUtils;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -15,7 +16,7 @@ import views.html.mypage;
 import views.html.register;
 
 import javax.inject.Inject;
-import java.io.File;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,14 +33,14 @@ public class HomeController extends Controller {
 
     @Security.Authenticated(models.Secured.class)
     public Result index() {
-        if(session("user_id")==null)
+        if (session("user_id") == null)
             return redirect(routes.HomeController.loginPage());
 
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
                 .findUnique();
 
-        if(u==null)
+        if (u == null)
             return redirect(routes.HomeController.loginPage());
 
         List<Tweet> list =
@@ -55,8 +56,8 @@ public class HomeController extends Controller {
         if (content == null)
             content = "let's write an introduction of yourself!";
 
-        u.user_name=userName;
-        u.biography=content;
+        u.user_name = userName;
+        u.biography = content;
 
         return ok(index.render(list, formfactory.form(Tweet.class), u));
     }
@@ -135,10 +136,12 @@ public class HomeController extends Controller {
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
                 .findUnique();
+        if(u==null)
+            return redirect(routes.HomeController.loginPage());
 
         Form<UserProperty> f = formfactory.form(UserProperty.class)
-                .fill(new UserProperty(u.user_name,u.biography));
-        return ok(mypage.render(f,u));
+                .fill(new UserProperty(u.user_name, u.biography));
+        return ok(mypage.render(f, u));
     }
 
     @RequireCSRFCheck
@@ -151,12 +154,12 @@ public class HomeController extends Controller {
             UserProperty up = f.get();
             if (up.userName != null) {
                 u.user_name = up.userName;
-                session("user_name",u.user_name);
+                session("user_name", u.user_name);
             }
 
             if (up.biography != null) {
                 u.biography = up.biography;
-                session("biography",u.biography);
+                session("biography", u.biography);
             }
 
             try {
@@ -167,8 +170,35 @@ public class HomeController extends Controller {
             }
             return redirect(routes.HomeController.index());
         } else {
-            return Results.badRequest(mypage.render(f,u));
+            return Results.badRequest(mypage.render(f, u));
         }
+    }
+
+    @Security.Authenticated(models.Secured.class)
+    public Result getUserIcon() {
+        String uid = session("user_id");
+
+        if (uid == null)
+            return Results.redirect(routes.HomeController.loginPage());
+
+        User u = User.find.where()
+                .eq("user_id", uid)
+                .findUnique();
+        if (u == null)
+            return Results.redirect(routes.HomeController.loginPage());
+
+        if (u.user_icon == null || u.user_icon.data == null) {
+            try (InputStream iStream = new BufferedInputStream(
+                    new FileInputStream("public/images/noimage-twitter.png"))) {
+                byte[] noimage = IOUtils.toByteArray(iStream);
+                return ok(noimage).as("image");
+            } catch (IOException e) {
+                e.printStackTrace();
+                return internalServerError();
+            }
+
+        } else
+            return ok(u.user_icon.data).as("image");
     }
 
     public Result registerPage() {
@@ -179,9 +209,10 @@ public class HomeController extends Controller {
     public Result register() throws NoSuchAlgorithmException {
         Form<User> f = formfactory.form(User.class).bindFromRequest();
         if (!f.hasErrors()) {
-            User u = new User(f.get().user_id, sha512(f.get().password));
-            u.user_name="NONAME";
-            u.biography="let's write an introduction of yourself!";
+            User u = new User(f.get().user_id,
+                    sha512(f.get().password));
+            u.user_name = "NONAME";
+            u.biography = "let's write an introduction of yourself!";
             try {
                 u.save();
             } catch (Exception e) {

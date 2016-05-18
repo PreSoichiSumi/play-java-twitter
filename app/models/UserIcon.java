@@ -26,7 +26,7 @@ public class UserIcon extends Model {
     }
 
     public UserIcon(File file) {
-        //try with resources は";"をつかって複数リソースを宣言することもできるよ
+        //try with resources は";"をつかって複数リソースを宣言することもできる
         try (InputStream iStream = new BufferedInputStream(new FileInputStream(file))) {
             iStream.read(this.data);
         } catch (IOException e) {
