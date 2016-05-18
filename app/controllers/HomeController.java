@@ -47,11 +47,12 @@ public class HomeController extends Controller {
         Collections.reverse(list);
 
         String userName = session("user_name");
-        if (userName == null || Objects.equals(userName,""))
+        if (userName == null)
             userName = "NONAME";
 
+
         String content = session("biography");
-        if (content == null || Objects.equals(content,""))
+        if (content == null)
             content = "let's write an introduction of yourself!";
 
         u.user_name=userName;
@@ -179,6 +180,8 @@ public class HomeController extends Controller {
         Form<User> f = formfactory.form(User.class).bindFromRequest();
         if (!f.hasErrors()) {
             User u = new User(f.get().user_id, sha512(f.get().password));
+            u.user_name="NONAME";
+            u.biography="let's write an introduction of yourself!";
             try {
                 u.save();
             } catch (Exception e) {
