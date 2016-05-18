@@ -160,7 +160,7 @@ public class HomeController extends Controller {
             }
 
             try {
-                u.save();
+                u.update();
             } catch (Exception e) {
                 e.printStackTrace();
                 return redirect(routes.HomeController.changeProperty());
