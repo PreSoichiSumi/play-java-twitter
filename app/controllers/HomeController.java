@@ -197,6 +197,19 @@ public class HomeController extends Controller {
             return ok(u.getUser_icon().getData()).as("image");
         }
     }
+    public Result upload() {
+        play.mvc.Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+        play.mvc.Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
+        if (picture != null) {
+            String fileName = picture.getFilename();
+            String contentType = picture.getContentType();
+            java.io.File file = picture.getFile();
+            return ok("File uploaded");
+        } else {
+            flash("error", "Missing file");
+            return badRequest();
+        }
+    }
 
     @Security.Authenticated(models.Secured.class)
     public Result uploadIcon() {
@@ -223,8 +236,9 @@ public class HomeController extends Controller {
             ui.save();
             u.setUser_icon(ui);
             u.update();
+            return Results.redirect(routes.HomeController.index());
         }
-        return badRequest();
+        return Results.redirect(routes.HomeController.changeProperty());
     }
 
 

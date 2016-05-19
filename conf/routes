@@ -20,6 +20,8 @@ POST        /property             controllers.HomeController.changeProperty
 GET         /usericon             controllers.HomeController.getUserIcon
 POST        /usericon             controllers.HomeController.uploadIcon
 
+POST        /upload               controllers.HomeController.upload
+
 
 # Map static resources from the /public folder to the /assets URL path
 # use Assets.versiont to cache your resouces

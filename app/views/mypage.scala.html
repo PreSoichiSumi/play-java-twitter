@@ -26,12 +26,16 @@
             <div class="form-signin">
                 <h2 class="form-signin-heading">ユーザ情報の変更</h2>
                 <div id="kv-avatar-errors" class="center-block" style="width:800px;display:none"></div>
-                <form class="text-center" action="@routes.HomeController.uploadIcon()" method="post" enctype="multipart/form-data">
-                    <div class="kv-avatar center-block" style="width:200px">
-                        <input id="avatar" name="avatar" type="file" class="file-loading">
-                    </div>
+                @form(action = routes.HomeController.uploadIcon, 'class ->"form-signin", 'enctype -> "multipart/form-data") {
 
-                </form>
+                    <div class="kv-avatar center-block" style="width:200px">
+                        <input id="avatar" name="picture" type="file" class="file-loading">
+                    </div>
+                    <button type="submit" tabindex="500" title="Upload selected files" class="btn btn-default fileinput-upload fileinput-upload-button"><i class="glyphicon glyphicon-upload"></i> <span class="hidden-xs">Upload</span></button>
+                    @CSRF.formField
+
+                }
+
                 @form(action = routes.HomeController.changeProperty, 'class -> "form-signin") {
 
                     @html5.tags.html.text(propertyForm("userName"), 'id -> "inputUserId",

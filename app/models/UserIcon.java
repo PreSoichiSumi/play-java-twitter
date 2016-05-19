@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import org.apache.commons.compress.utils.IOUtils;
 
 import javax.persistence.*;
 import java.io.*;
@@ -28,10 +29,11 @@ public class UserIcon extends Model {
     public UserIcon(File file) {
         //try with resources は";"をつかって複数リソースを宣言することもできる
         try (InputStream iStream = new BufferedInputStream(new FileInputStream(file))) {
-            iStream.read(this.data);
+            this.data=IOUtils.toByteArray(iStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public byte[] getData() {
