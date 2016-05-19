@@ -25,6 +25,13 @@
         <div class="container">
             <div class="form-signin">
                 <h2 class="form-signin-heading">ユーザ情報の変更</h2>
+                <div id="kv-avatar-errors" class="center-block" style="width:800px;display:none"></div>
+                <form class="text-center" action="@routes.HomeController.uploadIcon()" method="post" enctype="multipart/form-data">
+                    <div class="kv-avatar center-block" style="width:200px">
+                        <input id="avatar" name="avatar" type="file" class="file-loading">
+                    </div>
+
+                </form>
                 @form(action = routes.HomeController.changeProperty, 'class -> "form-signin") {
 
                     @html5.tags.html.text(propertyForm("userName"), 'id -> "inputUserId",
@@ -48,10 +55,16 @@
             </div>
         </div> <!-- /container -->
 
+
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="@routes.Assets.versioned("stylesheets/signin.css")" rel="stylesheet">
         <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
         <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/css/fileinput.min.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/js/fileinput.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/js/fileinput_locale_ja.min.js"></script>
+        <link href="@routes.Assets.versioned("stylesheets/file-input.css")" rel="stylesheet">
+        <script src="@routes.Assets.versioned("javascripts/file-input.js")"></script>
     </body>
 </html>
 
