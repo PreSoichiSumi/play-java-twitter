@@ -13,10 +13,10 @@ import java.io.*;
 public class UserIcon extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long user_icon_id;
+    private Long user_icon_id;
 
     @Lob
-    public byte[] data;
+    private byte[] data;
 
     public static Finder<Long, UserIcon> find =
             new Finder<>(UserIcon.class);
@@ -32,5 +32,17 @@ public class UserIcon extends Model {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public Long getUser_icon_id() {
+        return user_icon_id;
     }
 }

@@ -23,36 +23,37 @@ import java.util.List;
 public class User extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    private Long id;
 
     @Constraints.Required(message = "必須項目です")
     @Constraints.Pattern(value = "\\w{4,16}",
             message = "ユーザIDは英数字で構成され、4文字以上16文字以下です")
     @Column(unique = true)
     @Index
-    public String user_id;
+    private String user_id;
 
     @Constraints.Required
-    public String password;
+    private String password;
 
-    public String user_name;
+    private String user_name;
 
-    public String biography;
+    private String biography;
 
     @OneToOne(cascade = CascadeType.ALL)
-    public UserIcon user_icon;
+    private UserIcon user_icon;
 
     @OneToMany(cascade = CascadeType.ALL)
-    public List<Tweet> tweets;
+    private List<Tweet> tweets;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "relationship_table",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "following_id"))
-    public List<User> following;
+    private List<User> following;
 
     public User() {
+        super();
     }
 
     public User(String userId, String password) {
@@ -61,4 +62,68 @@ public class User extends Model {
     }
 
     public static Finder<Long, User> find = new Finder<>(User.class);//(class,class)...deprecated
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public UserIcon getUser_icon() {
+        return user_icon;
+    }
+
+    public void setUser_icon(UserIcon user_icon) {
+        this.user_icon = user_icon;
+    }
+
+    public List<Tweet> getTweets() {
+        return tweets;
+    }
+
+    public void setTweets(List<Tweet> tweets) {
+        this.tweets = tweets;
+    }
+
+    public List<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<User> following) {
+        this.following = following;
+    }
 }

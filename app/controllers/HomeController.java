@@ -41,7 +41,7 @@ public class HomeController extends Controller {
             return redirect(routes.HomeController.loginPage());
 
         List<Tweet> list =
-                u.tweets == null ? new ArrayList<>() : u.tweets;
+                u.getTweets() == null ? new ArrayList<>() : u.getTweets();
         Collections.reverse(list);
 
         String userName = session("user_name");
@@ -53,8 +53,8 @@ public class HomeController extends Controller {
         if (content == null)
             content = "let's write an introduction of yourself!";
 
-        u.user_name = userName;
-        u.biography = content;
+        u.setUser_name(userName);
+        u.setBiography(content);
 
         return ok(index.render(list, formfactory.form(Tweet.class), u));
     }
@@ -86,14 +86,14 @@ public class HomeController extends Controller {
                 //http://webcache.googleusercontent.com/search?
                 // q=cache:fSj3W9xRfswJ:microscopium.eyesaac.com/2015/11/27/play2redirect/+&cd=3
                 // &hl=ja&ct=clnk&gl=jp
-                if (u.user_id != null)
-                    session("user_id", u.user_id);
+                if (u.getUser_id() != null)
+                    session("user_id", u.getUser_id());
 
-                if (u.user_name != null)
-                    session("user_name", u.user_name);
+                if (u.getUser_name() != null)
+                    session("user_name", u.getUser_name());
 
-                if (u.biography != null)
-                    session("biography", u.biography);
+                if (u.getBiography() != null)
+                    session("biography", u.getBiography());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -137,8 +137,8 @@ public class HomeController extends Controller {
             return redirect(routes.HomeController.loginPage());
 
         Form<UserProperty> f = formfactory.form(UserProperty.class)
-                .fill(new UserProperty(u.user_name, u.biography));
-        return ok(mypage.render(f, u));
+                .fill(new UserProperty(u.getUser_name(), u.getBiography()));
+        return ok(mypage.render(f));
     }
 
     @RequireCSRFCheck
@@ -147,16 +147,16 @@ public class HomeController extends Controller {
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
                 .findUnique();
-        if (!f.hasErrors()) {
+        if (!f.hasErrors() && u!=null) {
             UserProperty up = f.get();
             if (up.userName != null) {
-                u.user_name = up.userName;
-                session("user_name", u.user_name);
+                u.setUser_name(up.userName);
+                session("user_name", u.getUser_name());
             }
 
             if (up.biography != null) {
-                u.biography = up.biography;
-                session("biography", u.biography);
+                u.setBiography(up.biography);
+                session("biography", u.getBiography());
             }
 
             try {
@@ -167,7 +167,7 @@ public class HomeController extends Controller {
             }
             return redirect(routes.HomeController.index());
         } else {
-            return Results.badRequest(mypage.render(f, u));
+            return Results.badRequest(mypage.render(f));
         }
     }
 
@@ -184,7 +184,7 @@ public class HomeController extends Controller {
         if (u == null)
             return Results.redirect(routes.HomeController.loginPage());
 
-        if (u.user_icon == null || u.user_icon.data == null) {
+        if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
             try (InputStream iStream = new BufferedInputStream(
                     new FileInputStream("public/images/noimage-twitter.png"))) {
                 byte[] noimage = IOUtils.toByteArray(iStream);
@@ -193,9 +193,9 @@ public class HomeController extends Controller {
                 e.printStackTrace();
                 return internalServerError();
             }
-
-        } else
-            return ok(u.user_icon.data).as("image");
+        } else {
+            return ok(u.getUser_icon().getData()).as("image");
+        }
     }
 
     @Security.Authenticated(models.Secured.class)
@@ -216,8 +216,12 @@ public class HomeController extends Controller {
             if (u == null)
                 return Results.redirect(routes.HomeController.loginPage());
 
+            if(u.getUser_icon() !=null)
+                u.getUser_icon().delete();
+
             UserIcon ui=new UserIcon(file);
-            u.user_icon=ui;
+            ui.save();
+            u.setUser_icon(ui);
             u.update();
         }
         return badRequest();
@@ -232,10 +236,10 @@ public class HomeController extends Controller {
     public Result register() throws NoSuchAlgorithmException {
         Form<User> f = formfactory.form(User.class).bindFromRequest();
         if (!f.hasErrors()) {
-            User u = new User(f.get().user_id,
-                    sha512(f.get().password));
-            u.user_name = "NONAME";
-            u.biography = "let's write an introduction of yourself!";
+            User u = new User(f.get().getUser_id(),
+                    sha512(f.get().getPassword()));
+            u.setUser_name("NONAME");
+            u.setBiography("let's write an introduction of yourself!");
             try {
                 u.save();
             } catch (Exception e) {

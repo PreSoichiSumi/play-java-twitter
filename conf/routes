@@ -18,6 +18,7 @@ GET         /property             controllers.HomeController.myPage
 POST        /property             controllers.HomeController.changeProperty
 
 GET         /usericon             controllers.HomeController.getUserIcon
+POST        /usericon             controllers.HomeController.uploadIcon
 
 
 # Map static resources from the /public folder to the /assets URL path

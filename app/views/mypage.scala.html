@@ -5,7 +5,7 @@
 * object to insert into the body of the page.
 *@
 @import helper._
-@(propertyForm: Form[UserProperty],userData:User)
+@(propertyForm: Form[UserProperty])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,27 +23,29 @@
 
     <body>
         <div class="container">
-            @form(action = routes.HomeController.changeProperty, 'class -> "form-signin") {
+            <div class="form-signin">
                 <h2 class="form-signin-heading">ユーザ情報の変更</h2>
-                @html5.tags.html.text(propertyForm("userName"), 'id -> "inputUserId",
-                    'class -> "form-control", 'required -> true,
-                    'autofocus -> true, '_showConstraints -> false, '_label -> "UserName")
-                @html5.tags.html.textarea(propertyForm("biography"), 'id -> "inputPassword",
-                    'class -> "form-control",
-                    '_showConstraints -> false, '_label -> "Biography")
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-                @CSRF.formField
-            }
+                @form(action = routes.HomeController.changeProperty, 'class -> "form-signin") {
 
-            @if(propertyForm.hasGlobalErrors) {
-                <div class="error">
-                @for(error <- propertyForm.globalErrors) {
-                    <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
+                    @html5.tags.html.text(propertyForm("userName"), 'id -> "inputUserId",
+                        'class -> "form-control", 'required -> true,
+                        'autofocus -> true, '_showConstraints -> false, '_label -> "UserName")
+                    @html5.tags.html.textarea(propertyForm("biography"), 'id -> "inputPassword",
+                        'class -> "form-control",
+                        '_showConstraints -> false, '_label -> "Biography")
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                    @CSRF.formField
                 }
-                </div>
-            }
 
+                @if(propertyForm.hasGlobalErrors) {
+                    <div class="error">
+                    @for(error <- propertyForm.globalErrors) {
+                        <p>@Messages(error.messages, error.arguments.toArray: _*)</p>
+                    }
+                    </div>
+                }
 
+            </div>
         </div> <!-- /container -->
 
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
