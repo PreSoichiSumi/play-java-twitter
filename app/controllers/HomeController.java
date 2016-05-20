@@ -50,6 +50,7 @@ public class HomeController extends Controller {
         showUserId.add(u);
         List<Tweet> list= Tweet.find.where()
                 .in("user",showUserId).findList();
+        Collections.reverse(list);
 
         String userName = session("user_name");
         if (userName == null)
