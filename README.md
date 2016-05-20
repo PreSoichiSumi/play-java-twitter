@@ -2,13 +2,17 @@
 
 create twitter by using play framework 2.x in java
 
-## build 
+## How to build 
 use lightbend activator
 
-## run 
+
+## How to run 
 do "activator run" at project root
 
-## service design
+and access localhost:9000 by browser
+
+
+## Service design
 I referenced:
 
 http://www.atmarkit.co.jp/news/201004/19/twitter.html
