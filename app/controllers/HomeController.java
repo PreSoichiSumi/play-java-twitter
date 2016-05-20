@@ -7,6 +7,7 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.*;
+import util.GeneralUtil;
 import views.html.index;
 import views.html.login;
 import views.html.mypage;
@@ -56,7 +57,7 @@ public class HomeController extends Controller {
         u.setUser_name(userName);
         u.setBiography(content);
 
-        return ok(index.render(list, formfactory.form(Tweet.class), u));
+        return ok(index.render(list, formfactory.form(Tweet.class), u, GeneralUtil.getRecomUserList(u.getUser_id(),0)));
     }
 
     //セッションにCSRFトークンを格納
@@ -199,6 +200,28 @@ public class HomeController extends Controller {
     }
 
     @Security.Authenticated(models.Secured.class)
+    public Result getOtherIcon(String userId) {
+        User u = User.find.where()
+                .eq("user_id", userId)
+                .findUnique();
+        if (u == null)
+            return Results.redirect(routes.HomeController.loginPage());
+
+        if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
+            try (InputStream iStream = new BufferedInputStream(
+                    new FileInputStream("public/images/noimage-twitter.png"))) {
+                byte[] noimage = IOUtils.toByteArray(iStream);
+                return ok(noimage).as("image");
+            } catch (IOException e) {
+                e.printStackTrace();
+                return internalServerError();
+            }
+        } else {
+            return ok(u.getUser_icon().getData()).as("image");
+        }
+    }
+
+    @Security.Authenticated(models.Secured.class)
     public Result uploadIcon() {
         Http.MultipartFormData.FilePart picture=request()
                 .body()
@@ -239,8 +262,8 @@ public class HomeController extends Controller {
         if (!f.hasErrors()) {
             User u = new User(f.get().getUser_id(),
                     sha512(f.get().getPassword()));
-            u.setUser_name("NONAME");
-            u.setBiography("let's write an introduction of yourself!");
+            u.setUser_name("名無し");
+            u.setBiography("自己紹介文を書こう！");
             try {
                 u.save();
             } catch (Exception e) {

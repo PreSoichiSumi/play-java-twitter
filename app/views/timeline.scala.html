@@ -6,7 +6,7 @@
 *@
 @import helper._
 
-@(tweets: List[Tweet], tweetForm: Form[Tweet], userData: User)
+@(tweets: List[Tweet], tweetForm: Form[Tweet], userData: User, recomUsers:List[User])
 <div class="page-header" id="banner">
     <div class="row">
         <h1></h1> <h3></h3>
@@ -18,6 +18,27 @@
                 <h3>@userData.getUser_name</h3>
                 @userData.getBiography
             </div>
+            @if(recomUsers!=null){
+                <div class="well well-sm well-lg">
+                    <h3>おすすめユーザー</h3>
+                    @for(user<-recomUsers){
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <img src="/usericon/@user.getUser_id" class="img-rounded" width="50">
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="row">@user.getUser_name</div>
+                                <div class="row">
+                                    <button type="button" class="btn btn-primary-outline">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <small><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></small>フォローする
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
         </div>
         <div class="col-lg-9 col-md-9 col-sm-8">
             <div class="row">
@@ -25,7 +46,7 @@
                     @textarea(tweetForm("content"), 'class -> "form-control",
                         'placeholder -> "what's up, brother?",
                         '_showConstraints -> false, '_label -> null)
-                    <button class="btn btn-primary pull-right">Tweet</button>
+                    <button class="btn btn-primary pull-right" id="tweet-button">Tweet</button>
                     @CSRF.formField
                 }
 

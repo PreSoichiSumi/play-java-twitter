@@ -1,4 +1,4 @@
-@(tweets: List[Tweet], tweetForm: Form[Tweet], userData: User)
+@(tweets: List[Tweet], tweetForm: Form[Tweet], userData: User, recomUsers:List[User]))
 <!DOCTYPE html>
 <html lang="jp">
     <head>
@@ -41,7 +41,7 @@
         </nav>
         <div class="container">
 
-            @timeline(tweets, tweetForm, userData)
+            @timeline(tweets, tweetForm, userData,recomUsers)
 
             <footer>
                 <div class="row col-lg-12">
