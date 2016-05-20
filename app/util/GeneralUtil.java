@@ -3,6 +3,7 @@ package util;
 import com.avaje.ebean.PagedList;
 import models.User;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class GeneralUtil {
     public static String sha512(String message) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-512");
+        /*
         StringBuilder sb = new StringBuilder();
         md.update(message.getBytes());
         byte[] mb = md.digest();
@@ -22,6 +24,10 @@ public class GeneralUtil {
             sb.append(hex);
         }
         return sb.toString();
+        */
+        md.update(message.getBytes());
+        byte[] mb = md.digest();
+        return DatatypeConverter.printHexBinary(mb);
     }
 
     public static List<User> getRecomUserList(User u, Integer pagenum) {
