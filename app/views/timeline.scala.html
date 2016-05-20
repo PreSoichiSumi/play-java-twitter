@@ -67,7 +67,17 @@
             <div class="row">
                 <ul class="list-group top-buffer">
                     @for(tweet <- tweets) {
-                        <li class="list-group-item">@tweet.content</li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <img src="/usericon/@tweet.user.getUser_id" class="img-rounded" width="50">
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-10">
+                                    @tweet.content<br>
+                                    @tweet.postDate
+                                </div>
+                            </div>
+                        </li>
                     }
                 </ul>
             </div>
