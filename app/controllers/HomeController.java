@@ -57,7 +57,8 @@ public class HomeController extends Controller {
         u.setUser_name(userName);
         u.setBiography(content);
 
-        return ok(index.render(list, formfactory.form(Tweet.class), u, GeneralUtil.getRecomUserList(u.getUser_id(),0)));
+        return ok(index.render(list, formfactory.form(Tweet.class),
+                u, GeneralUtil.getRecomUserList(u,0)));
     }
 
     //セッションにCSRFトークンを格納
@@ -170,6 +171,24 @@ public class HomeController extends Controller {
         } else {
             return Results.badRequest(mypage.render(f));
         }
+    }
+
+    public Result follow(String followedUserId){
+        User u = User.find.where()
+                .eq("user_id", session("user_id"))
+                .findUnique();
+        if(u==null)
+            return internalServerError();
+
+        User followedUser = User.find.where()
+                            .eq("user_id",followedUserId)
+                            .findUnique();
+        if(followedUser==null)
+            return internalServerError();
+
+        u.addFollowing(followedUser);
+        u.update();
+        return redirect(routes.HomeController.index());
     }
 
     @Security.Authenticated(models.Secured.class)

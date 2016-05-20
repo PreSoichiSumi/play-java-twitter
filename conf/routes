@@ -18,8 +18,10 @@ GET         /property             controllers.HomeController.myPage
 POST        /property             controllers.HomeController.changeProperty
 
 GET         /usericon             controllers.HomeController.getUserIcon
-GET         /usericon/:userId     controllers.HomeController.getOtherIcon(userId :String)
+GET         /usericon/:userId     controllers.HomeController.getOtherIcon(userId: String)
 POST        /usericon             controllers.HomeController.uploadIcon
+
+POST        /follow/:follows      controllers.HomeController.follow(follows: String)
 
 # Map static resources from the /public folder to the /assets URL path
 # use Assets.versiont to cache your resouces

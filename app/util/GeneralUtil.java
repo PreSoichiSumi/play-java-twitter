@@ -6,6 +6,7 @@ import models.User;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by s-sumi on 2016/05/10.
@@ -22,8 +23,16 @@ public class GeneralUtil {
         }
         return sb.toString();
     }
-    public static List<User> getRecomUserList(String user_id, Integer pagenum){
-        PagedList<User> recomUsers=User.find.where().ne("user_id",user_id).findPagedList(0,3);
+
+    public static List<User> getRecomUserList(User u, Integer pagenum) {
+        List<String> excludeIds = u.getFollowing().stream()
+                .map(User::getUser_id)
+                .collect(Collectors.toList());
+        excludeIds.add(u.getUser_id());
+
+        PagedList<User> recomUsers = User.find.where()
+                .notIn("user_id", excludeIds)
+                .findPagedList(pagenum, 3);
         return recomUsers.getList();
     }
 

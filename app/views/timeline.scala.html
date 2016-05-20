@@ -29,13 +29,19 @@
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <div class="row">@user.getUser_name</div>
                                 <div class="row">
-                                    <button type="button" class="btn btn-primary-outline">
-                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                        <small><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></small>フォローする
-                                    </button>
+                                    <form method="post" action="/follow/@user.getUser_id">
+                                        <button type="submit" class="btn btn-primary-outline">
+                                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                            <small><small><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></small></small>フォローする
+                                        </button>
+                                        @CSRF.formField
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    }
+                    @if(recomUsers.size()==0){
+                        <h4>いません。。。</h4>
                     }
                 </div>
             }
@@ -60,10 +66,9 @@
             </div>
             <div class="row">
                 <ul class="list-group top-buffer">
-
-                @for(tweet <- tweets) {
-                    <li class="list-group-item">@tweet.content</li>
-                }
+                    @for(tweet <- tweets) {
+                        <li class="list-group-item">@tweet.content</li>
+                    }
                 </ul>
             </div>
 

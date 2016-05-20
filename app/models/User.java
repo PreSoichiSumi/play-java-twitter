@@ -5,6 +5,7 @@ import com.avaje.ebean.annotation.Index;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,11 +55,13 @@ public class User extends Model {
 
     public User() {
         super();
+        this.following=new ArrayList<>();
     }
 
     public User(String userId, String password) {
         this.user_id = userId;
         this.password = password;
+        this.following=new ArrayList<>();
     }
 
     public static Finder<Long, User> find = new Finder<>(User.class);//(class,class)...deprecated
@@ -123,7 +126,7 @@ public class User extends Model {
         return following;
     }
 
-    public void setFollowing(List<User> following) {
-        this.following = following;
+    public void addFollowing(User follow) {
+        this.following.add(follow);
     }
 }
