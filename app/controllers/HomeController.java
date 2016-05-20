@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static util.GeneralUtil.sha512;
 
@@ -41,9 +42,14 @@ public class HomeController extends Controller {
         if (u == null)
             return redirect(routes.HomeController.loginPage());
 
-        List<Tweet> list =
+        /*List<Tweet> list =
                 u.getTweets() == null ? new ArrayList<>() : u.getTweets();
-        Collections.reverse(list);
+        Collections.reverse(list);*/
+
+        List<User> showUserId = u.getFollowing();
+        showUserId.add(u);
+        List<Tweet> list= Tweet.find.where()
+                .in("user",showUserId).findList();
 
         String userName = session("user_name");
         if (userName == null)
@@ -173,6 +179,7 @@ public class HomeController extends Controller {
         }
     }
 
+    @Security.Authenticated(models.Secured.class)
     public Result follow(String followedUserId){
         User u = User.find.where()
                 .eq("user_id", session("user_id"))
