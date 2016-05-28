@@ -12,7 +12,7 @@ do "activator run" at project root
 and access localhost:9000 by browser
 
 ## Tasks that I want to do
-### Scaling
+Scaling
 * ~~Replication of Database by using mysql~~ done
 * Partisioning of tweet table
 * use memcached to cache query results
