@@ -123,9 +123,14 @@ public class HomeController extends Controller {
     public Result tweet() {
         Form<Tweet> f = formfactory.form(Tweet.class).bindFromRequest();
         if (!f.hasErrors()) {
-            Tweet t = new Tweet(f.get().content);
+            Tweet t = new Tweet();
+            t.setContent(f.get().content);
             try {
-                t.user = User.find.where().eq("user_id", session("user_id")).findUnique();
+                User u=User.find.where().eq("user_id", session("user_id")).findUnique();
+                t.setUser(u);
+                CombinedTweetKey ctk=new CombinedTweetKey();
+                ctk.setTweetId(u.getUser_id()+ctk.getPostDate().toString());
+                t.setTweetKey(ctk);
                 t.save();
             } catch (Exception e) {
                 e.printStackTrace();

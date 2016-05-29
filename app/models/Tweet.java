@@ -13,13 +13,8 @@ import java.util.Date;
  */
 @Entity
 public class Tweet extends Model {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Index
-    public Long tweetId;
-
-    @CreatedTimestamp
-    public Date postDate;
+    @EmbeddedId
+    public CombinedTweetKey tweetKey;
 
     @Constraints.Required
     @Constraints.Pattern(value = "\\w{1,140}", message = "ツイートは英数字で1-140字です")
@@ -28,13 +23,32 @@ public class Tweet extends Model {
     @ManyToOne
     public User user;
 
-    public static Finder<Long, Tweet> find = new Finder<Long, Tweet>(Tweet.class);
-
-    public Tweet() {
-        super();
+    public CombinedTweetKey getTweetKey() {
+        return tweetKey;
     }
 
-    public Tweet(String content) {
+    public void setTweetKey(CombinedTweetKey tweetKey) {
+        this.tweetKey = tweetKey;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public static Finder<Long, Tweet> find = new Finder<>(Tweet.class);
+
 }
+
+
