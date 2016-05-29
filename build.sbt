@@ -7,8 +7,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava,PlayEbean)
 scalaVersion := "2.11.8"
 unmanagedBase := baseDirectory.value / "lib"
 
-//キャッシュが残るのでバージョン変更時は
+// caution : キャッシュが残るのでバージョン変更時は
 // activator clean-> activator run
+// "com.h2database" % "h2" % "1.4.191"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
@@ -17,11 +18,10 @@ libraryDependencies ++= Seq(
   "commons-codec" % "commons-codec" % "1.10",
   "junit" % "junit" % "4.12",
   "org.webjars" %% "webjars-play" % "2.5.0",
-  "com.h2database" % "h2" % "1.4.191",
+  "mysql" % "mysql-connector-java" % "5.1.39",
   "com.loicdescotte.coffeebean" %% "html5tags" % "1.2.2",
   filters
 )
-herokuAppName in Compile := "asciiart-converter"
 
 routesGenerator:=InjectedRoutesGenerator
 resolvers+="webjars" at "http://webjars.github.com/m2"
