@@ -13,8 +13,8 @@ and access localhost:9000 by browser
 
 ## Tasks that I want to do
 Scaling
-* ~~Replication of Database by using mysql~~ done
-* Partisioning of tweet table
+* ~~replication of database by using mysql~~ done
+* **partisioning of tweet table** doing
 * use memcached to cache query results
 
 ## References
