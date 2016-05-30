@@ -17,7 +17,6 @@ public class Tweet extends Model {
     public CombinedTweetKey tweetKey;
 
     @Constraints.Required
-    @Constraints.Pattern(value = "\\w{1,140}", message = "ツイートは英数字で1-140字です")
     public String content;
 
     @ManyToOne

@@ -219,9 +219,8 @@ public class HomeController extends Controller {
             return Results.redirect(routes.HomeController.loginPage());
 
         if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
-            try (InputStream iStream = new BufferedInputStream(
-                    new FileInputStream("public/images/noimage-twitter.png"))) {
-                byte[] noimage = IOUtils.toByteArray(iStream);
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
+                byte[] noimage = IOUtils.toByteArray(is);
                 return ok(noimage).as("image");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -241,8 +240,7 @@ public class HomeController extends Controller {
             return Results.redirect(routes.HomeController.loginPage());
 
         if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
-            try (InputStream iStream = new BufferedInputStream(
-                    new FileInputStream("public/images/noimage-twitter.png"))) {
+            try (InputStream iStream = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
                 byte[] noimage = IOUtils.toByteArray(iStream);
                 return ok(noimage).as("image");
             } catch (IOException e) {

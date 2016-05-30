@@ -24,12 +24,18 @@ public class UserIcon extends Model {
 
     public UserIcon() {
         super();
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
+            byte[] noimage = IOUtils.toByteArray(is);
+            this.setData(noimage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public UserIcon(File file) {
         //try with resources は";"をつかって複数リソースを宣言することもできる
         try (InputStream iStream = new BufferedInputStream(new FileInputStream(file))) {
-            this.data=IOUtils.toByteArray(iStream);
+            this.setData(IOUtils.toByteArray(iStream));
         } catch (IOException e) {
             e.printStackTrace();
         }
