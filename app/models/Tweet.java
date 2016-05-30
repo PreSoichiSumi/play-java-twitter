@@ -12,6 +12,7 @@ import java.util.Date;
  * Created by s-sumi on 2016/05/08.
  */
 @Entity
+@Index(columnNames = {"post_date","tweet_id"})
 public class Tweet extends Model {
     @EmbeddedId
     public CombinedTweetKey tweetKey;

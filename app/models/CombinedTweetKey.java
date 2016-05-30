@@ -10,8 +10,6 @@ public class CombinedTweetKey{
     public String tweetId;
     public Date postDate=new Date();
 
-
-
     public String getTweetId() {
         return tweetId;
     }
