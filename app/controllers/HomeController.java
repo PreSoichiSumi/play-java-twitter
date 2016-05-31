@@ -53,8 +53,7 @@ public class HomeController extends Controller {
         List<User> showUserId = u.getFollowing();
         showUserId.add(u);
         List<Tweet> list= Tweet.find.where()
-                .in("user",showUserId).setMaxRows(20).findList();
-        Collections.reverse(list);
+                .in("user",showUserId).orderBy("post_date desc").setMaxRows(20).findList();
 
 
         String userName = session("user_name");
