@@ -8,7 +8,7 @@ use lightbend activator
 
 ## How to run 
 
-checkout 38ba4560cce81463aa7cee3d5fc0209480d0a308
+checkout: https://github.com/SoichiSumi/play-java-twitter/commit/38ba4560cce81463aa7cee3d5fc0209480d0a308
 
 (latest revision requires mysql database server on port localhost:3306)
 
