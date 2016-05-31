@@ -14,8 +14,8 @@ and access localhost:9000 by browser
 ## Tasks that I want to do
 Scaling
 * ~~replication of database by using mysql~~ done
-* **partisioning of tweet table** doing
-* use memcached to cache query results
+* ~~partisioning of tweet table~~ done
+* **use memcached to cache query results** doing
 
 ## References
 http://www.atmarkit.co.jp/news/201004/19/twitter.html
