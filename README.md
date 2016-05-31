@@ -10,7 +10,7 @@ use lightbend activator
 
 checkout: https://github.com/SoichiSumi/play-java-twitter/commit/38ba4560cce81463aa7cee3d5fc0209480d0a308
 
-(latest revision requires mysql database server on port localhost:3306)
+(latest revision requires mysql on port localhost:3306)
 
 do "activator run" at project root
 
