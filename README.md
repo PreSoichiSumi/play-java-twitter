@@ -15,7 +15,8 @@ and access localhost:9000 by browser
 Scaling
 * ~~replication of database by using mysql~~ DONE
 * ~~partisioning of tweet table~~ DONE
-* **use memcached to cache query results** DOING
+* ~~use memcached to cache query results~~ 
+  * ~~→use ehcache because memcached api is not exist currently~~ DOING
 
 ## References
 http://www.atmarkit.co.jp/news/201004/19/twitter.html
