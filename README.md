@@ -8,13 +8,12 @@ use lightbend activator
 
 ## How to run 
 
-checkout: https://github.com/SoichiSumi/play-java-twitter/commit/38ba4560cce81463aa7cee3d5fc0209480d0a308
-
+1.  checkout: https://github.com/SoichiSumi/play-java-twitter/commit/38ba4560cce81463aa7cee3d5fc0209480d0a308
 (latest revision requires mysql on port localhost:3306)
 
-do "activator run" at project root
+2.  do "activator run" at project root
 
-and access localhost:9000 by browser
+3.  access localhost:9000 by browser
 
 ## Tasks that I want to do
 Scaling
