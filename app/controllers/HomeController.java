@@ -2,6 +2,7 @@ package controllers;
 
 import models.*;
 import org.apache.commons.compress.utils.IOUtils;
+import play.cache.CacheApi;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -29,6 +30,9 @@ public class HomeController extends Controller {
     WebJarAssets webJarAssets;
     @Inject
     FormFactory formfactory;
+    @Inject
+    CacheApi cache;
+
 
     @Security.Authenticated(models.Secured.class)
     public Result index() {
@@ -208,47 +212,55 @@ public class HomeController extends Controller {
     @Security.Authenticated(models.Secured.class)
     public Result getUserIcon() {
         String uid = session("user_id");
+        if(cache.get(uid)==null) {
+            if (uid == null)
+                return Results.redirect(routes.HomeController.loginPage());
 
-        if (uid == null)
-            return Results.redirect(routes.HomeController.loginPage());
+            User u = User.find.where()
+                    .eq("user_id", uid)
+                    .findUnique();
+            if (u == null)
+                return Results.redirect(routes.HomeController.loginPage());
 
-        User u = User.find.where()
-                .eq("user_id", uid)
-                .findUnique();
-        if (u == null)
-            return Results.redirect(routes.HomeController.loginPage());
-
-        if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
-            try (InputStream is = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
-                byte[] noimage = IOUtils.toByteArray(is);
-                return ok(noimage).as("image");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return internalServerError();
+            if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
+                    byte[] noimage = IOUtils.toByteArray(is);
+                    cache.set(uid,noimage);
+                    return ok(noimage).as("image");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return internalServerError();
+                }
+            } else {
+                return ok(u.getUser_icon().getData()).as("image");
             }
-        } else {
-            return ok(u.getUser_icon().getData()).as("image");
+        }else{
+            return ok((byte[])cache.get(uid)).as("image");
         }
     }
 
     @Security.Authenticated(models.Secured.class)
     public Result getOtherIcon(String userId) {
-        User u = User.find.where()
-                .eq("user_id", userId)
-                .findUnique();
-        if (u == null)
-            return Results.redirect(routes.HomeController.loginPage());
+        if(cache.get(userId)==null) {
+            User u = User.find.where()
+                    .eq("user_id", userId)
+                    .findUnique();
+            if (u == null)
+                return Results.redirect(routes.HomeController.loginPage());
 
-        if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
-            try (InputStream iStream = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
-                byte[] noimage = IOUtils.toByteArray(iStream);
-                return ok(noimage).as("image");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return internalServerError();
+            if (u.getUser_icon() == null || u.getUser_icon().getData() == null) {
+                try (InputStream iStream = getClass().getClassLoader().getResourceAsStream("public/images/noimage-twitter.png")) {
+                    byte[] noimage = IOUtils.toByteArray(iStream);
+                    return ok(noimage).as("image");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return internalServerError();
+                }
+            } else {
+                return ok(u.getUser_icon().getData()).as("image");
             }
-        } else {
-            return ok(u.getUser_icon().getData()).as("image");
+        }else{
+            return ok((byte[])cache.get(userId)).as("image");
         }
     }
 
@@ -277,6 +289,7 @@ public class HomeController extends Controller {
             ui.save();
             u.setUser_icon(ui);
             u.update();
+            cache.set(uid,ui.getData());
             return Results.redirect(routes.HomeController.index());
         }
         return Results.redirect(routes.HomeController.changeProperty());
