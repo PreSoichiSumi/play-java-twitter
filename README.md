@@ -26,5 +26,6 @@ Scaling
 ![ScreenShot](https://github.com/SoichiSumi/play-java-twitter/blob/master/ScreenShot.png?raw=true "Screen Shot")
 
 ## References
-http://www.atmarkit.co.jp/news/201004/19/twitter.html
+http://www.atmarkit.co.jp/news/201004/19/twitter.html 
+
 http://www.slideshare.net/nkallen/q-con-3770885
